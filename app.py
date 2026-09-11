@@ -1,106 +1,4 @@
 
-Ahh yes — I understand. You mean inside the State/District sections, some records are displaying None for things like state/district names.
-
-That is because your dataset has some missing/invalid administrative mappings. We should hide/replace those values in the UI, not modify the underlying GSI data.
-
-For example:
-
-State = None → State = Unknown / Unmapped
-
-District = None → District = Unknown / Unmapped
-
-But for the state selector, we should ideally exclude None entirely, so the dropdown only contains actual states.
-
-Quick fix
-In your app.py, wherever the state list is created, use:
-
-states = sorted(
-    df["state"]
-    .dropna()
-    .astype(str)
-    .loc[lambda x: x.str.strip().ne("")]
-    .loc[lambda x: x.str.lower().ne("none")]
-    .unique()
-)
-And wherever you create the district list:
-
-districts = sorted(
-    state_df["district"]
-    .dropna()
-    .astype(str)
-    .loc[lambda x: x.str.strip().ne("")]
-    .loc[lambda x: x.str.lower().ne("none")]
-    .unique()
-)
-For displayed values, use:
-
-state_name = str(row.get("state", "Unknown")).strip()
-
-if state_name.lower() in ["none", "nan", ""]:
-    state_name = "Unknown / Unmapped"
-Same for district:
-
-district_name = str(row.get("district", "Unknown")).strip()
-
-if district_name.lower() in ["none", "nan", ""]:
-    district_name = "Unknown / Unmapped"
-One thing I'd change too
-Your data already has 29,987/29,990 district mappings, so only 3 records are actually unmapped in the merged dataset. That's tiny.
-
-The bigger issue is likely that some UI code converts missing values to the literal string "None" while building the state/district sections.
-
-Don't rebuild the dataset. The data is fine enough; just sanitize the UI values.
-
-If you want, I can give you the entire current app.py with the None issue fixed everywhere, while preserving your current detailed Command Center.
-
-
-how tp change i cant find manually in app
-
-Yep bro 😭 don't manually find anything. We'll replace the whole app.py, but I need to use your current detailed version, not give you a stripped-down app.
-
-Since your current deployed app is working, the safest way is:
-
-1. Download your current app.py from GitHub
-In PowerShell, inside your project folder, run only this command:
-
-git checkout -- app.py
-2. Then send me your current app.py
-You can simply upload app.py here.
-
-I'll modify the entire file and give you a complete copy-paste replacement that:
-
-removes None from State dropdowns
-
-removes None from District dropdowns
-
-changes missing display values to Unknown / Unmapped
-
-handles NaN too
-
-keeps ALL your current dashboard sections
-
-keeps your maps
-
-keeps exposure
-
-keeps alerts
-
-keeps field reporting
-
-keeps weather scenario
-
-keeps system health
-
-keeps the current styling
-
-Then I'll give you exactly:
-
-git add app.py
-git commit -m "Fix state and district display values"
-git push origin main --force
-Don't try to search through the 2,900+ lines yourself. Upload the current app.py and I'll do the whole thing.
-
-
 
 Pasted text(7).txt
 Document
@@ -169,11 +67,134 @@ app_fixed_none.py
 Code
 
 
-Library
-/
-LEETCODE PROBLEMS
-/
+\Users\win10\OneDrive\Desktop\SIH 2.0\SIH26001-Landslide-System> Copy-Item "C:\Users\YOUR_NAME\Downloads\app_fixed_none.py" ".\app.py" -Force
+Copy-Item : Cannot find path 'C:\Users\YOUR_NAME\Downloads\app_fixed_none.py' because it does not exist.
+At line:1 char:1
++ Copy-Item "C:\Users\YOUR_NAME\Downloads\app_fixed_none.py" ".\app.py" ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\YOUR_N...p_fixed_none.py:String) [Copy-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.CopyItemCommand
+
+Yep — that's my mistake. YOUR_NAME was only a placeholder, so PowerShell literally looked for a folder with that name.
+
+Since the fixed file is already available in this chat, don't use that Downloads command.
+
+Easiest way
+Click Download the fixed app.py.
+
+Save it directly into this folder:
+
+C:\Users\win10\OneDrive\Desktop\SIH 2.0\SIH26001-Landslide-System
+When Windows asks, choose Replace the file for the existing app.py.
+
+Then open PowerShell in that folder and run only these commands:
+
+git add app.py
+git commit -m "Fix None values in state and district views"
+git push origin main --force
+That's it.
+
+⚠️ Do not paste the PS C:\...> part, only the commands themselves.
+
+After GitHub finishes, wait for Streamlit Cloud to redeploy and refresh the site.
+
+
 app_fixed_none.py
+Code
+
+
+File "/mount/src/sih26001-landslide-ai/app.py", line 2
+  Ahh yes — I understand. You mean inside the State/District sections, some records are displaying None for things like state/district names.
+          ^
+SyntaxError: invalid character '—' (U+2014) mf what have u done
+
+You're right. That was my fault. The file that ended up on Streamlit contains my explanatory chat text instead of Python code. That's why Streamlit is choking on:
+
+Ahh yes — I understand...
+Your actual original app.py was fine. I have now taken the real 3,738-line app you uploaded and applied the None fix directly to that code. 
+
+
+Do this exactly
+Download this:
+
+Download the corrected complete app.py
+
+Rename it to:
+
+app.py
+and put it here:
+
+C:\Users\win10\OneDrive\Desktop\SIH 2.0\SIH26001-Landslide-System
+Replace the existing app.py.
+
+Then PowerShell:
+
+git add app.py
+git commit -m "Fix None values in state and district sections"
+git push origin main --force
+Wait for Streamlit to redeploy.
+
+What I changed
+I did not simplify or rewrite your dashboard.
+
+Your existing features remain:
+
+Command Center
+
+GSI inventory
+
+DEM/Terrain
+
+AI Random Forest
+
+Dynamic risk map
+
+Historical inventory
+
+Top 10 risk locations
+
+Location analysis
+
+Weather scenario
+
+What-if simulator
+
+State → District Command View
+
+Road & Settlement Exposure
+
+Automated Alerts
+
+Active Alert Map
+
+Decision Support
+
+Citizen/Field Reports
+
+Emergency Export
+
+System Health
+
+Data Provenance
+
+I only added a cleanup immediately after the datasets load so values such as:
+
+None
+NaN
+null
+become:
+
+Unknown / Unmapped
+and therefore don't appear as ugly None values in the State/District UI.
+
+Most importantly: don't paste any of my explanatory text into app.py. Only the downloaded file should go there. 
+
+
+app_FIXED_READY.py
+Code
+
+
+app_FIXED_READY.py
 
 
 1
@@ -201,6 +222,7 @@ app_fixed_none.py
 23
 24
 25
+26
 # ============================================================
 # SIH26001 - NER LANDSLIDE AI COMMAND CENTER
 # FULL FEATURE PROTOTYPE
@@ -226,3 +248,4 @@ MODEL_DIR = BASE / "model"
 SCRIPTS_DIR = BASE / "scripts"
 
 # IMPORTANT:
+# This is the merged dataset containing:
