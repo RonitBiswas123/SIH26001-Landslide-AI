@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.streamlit/secrets.toml
+data/raw/*
+data/processed/*
+!data/raw/gsi/.gitkeep
+!data/raw/isro/.gitkeep
+!data/raw/imd/.gitkeep
+!data/raw/dem/.gitkeep
+!data/processed/.gitkeep
+
+data/exposure/roads.geojson
+data/exposure/ner.osm.pbf
+
