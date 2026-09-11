@@ -33,7 +33,7 @@ MASTER_FILE = (
 # Fallback if merged file does not exist
 OLD_MASTER_FILE = (
     DATA_DIR /
-    "master_landslide_dataset.csv"
+    "master_landslide_dataset_with_districts.csv"
 )
 
 EXPOSURE_FILE = (
@@ -3735,3 +3735,4 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
