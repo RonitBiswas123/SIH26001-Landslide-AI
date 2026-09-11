@@ -16,7 +16,7 @@ import pydeck as pdk
 # PATHS
 # ============================================================
 
-BASE = Path(__file__).resolve().parent
+BASE = Path(__file__).resolve().parent`r`nif not (BASE / "data").exists() and (BASE.parent / "data").exists():`r`n    BASE = BASE.parent
 
 DATA_DIR = BASE / "data" / "processed"
 MODEL_DIR = BASE / "model"
@@ -3735,4 +3735,5 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 
