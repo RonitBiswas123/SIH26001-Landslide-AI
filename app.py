@@ -17,8 +17,6 @@ import pydeck as pdk
 # ============================================================
 
 BASE = Path(__file__).resolve().parent
-if not (BASE / 'data').exists() and (BASE.parent / 'data').exists():
-    BASE = BASE.parent`r`nif not (BASE / "data").exists() and (BASE.parent / "data").exists():`r`n    BASE = BASE.parent
 
 DATA_DIR = BASE / "data" / "processed"
 MODEL_DIR = BASE / "model"
@@ -35,7 +33,7 @@ MASTER_FILE = (
 # Fallback if merged file does not exist
 OLD_MASTER_FILE = (
     DATA_DIR /
-    "master_landslide_dataset_with_districts.csv"
+    "master_landslide_dataset.csv"
 )
 
 EXPOSURE_FILE = (
@@ -3737,7 +3735,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-
-
-
