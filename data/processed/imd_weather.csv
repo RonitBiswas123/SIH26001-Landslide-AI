@@ -1,0 +1,2 @@
+timestamp,source,status,rainfall_24h_mm,rainfall_7d_mm,soil_moisture_percent,data_mode
+2026-09-11T09:44:28.394299,India Meteorological Department,OFFLINE,150.0,500.0,75.0,PROTOTYPE_SCENARIO
